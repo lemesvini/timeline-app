@@ -1,0 +1,57 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { z } from 'zod';
+
+import { api } from '@/lib/api-client';
+import { type MutationConfig } from '@/lib/react-query';
+import { type Movie } from '@/types/api';
+
+import { getMoviesQueryOptions } from './get-movies';
+
+export const updateMovieInputSchema = z.object({
+  name: z.string().min(1, { message: 'Nome é obrigatório' }),
+  description: z
+    .string()
+    .min(10, { message: 'Descrição deve ter no mínimo 10 caracteres' }),
+  movieGenre: z.string().min(1, { message: 'Gênero é obrigatório' }),
+  trailerLink: z.string().min(1, { message: 'Link do trailer é obrigatório' }),
+  releaseDate: z
+    .string()
+    .min(1, { message: 'Data de lançamento é obrigatória' }),
+  director: z
+    .number({ invalid_type_error: 'Diretor é obrigatório' })
+    .min(1, { message: 'Diretor é obrigatório' }),
+});
+
+export type UpdateMovieInput = z.infer<typeof updateMovieInputSchema>;
+
+export const updateMovie = async ({
+  data,
+  movieId,
+}: {
+  data: UpdateMovieInput;
+  movieId: number;
+}): Promise<Movie> => {
+  const response = await api.patch(`/movies/${movieId}`, data);
+  return response.data;
+};
+
+type UseUpdateMovieOptions = {
+  mutationConfig?: MutationConfig<typeof updateMovie>;
+};
+
+export const useUpdateMovie = ({ mutationConfig }: UseUpdateMovieOptions) => {
+  const queryClient = useQueryClient();
+
+  const { onSuccess, ...restConfig } = mutationConfig || {};
+
+  return useMutation({
+    onSuccess: (data, ...args) => {
+      queryClient.invalidateQueries({
+        queryKey: getMoviesQueryOptions().queryKey,
+      });
+      onSuccess?.(data, ...args);
+    },
+    ...restConfig,
+    mutationFn: updateMovie,
+  });
+};
