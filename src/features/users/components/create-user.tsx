@@ -53,9 +53,9 @@ export const CreateUser = () => {
             defaultValues: {
               role: Role.USER,
               email: '',
+              password: '',
               fullName: '',
               avatarUrl: '',
-              password: '',
             },
           }}
           schema={createUserInputSchema}
@@ -84,7 +84,7 @@ export const CreateUser = () => {
                   />
                   <Input
                     label='Senha *'
-                    type='input'
+                    type='password'
                     error={formState.errors['password']}
                     registration={register('password')}
                   />

@@ -82,6 +82,11 @@ export const UpdateUser = ({ userId, user }: UpdateUserProps) => {
                     error={formState.errors['fullName']}
                     registration={register('fullName')}
                   />
+                  <Input
+                    label='Email'
+                    error={formState.errors['email']}
+                    registration={register('email')}
+                  />
                   <Select
                     label='Cargo'
                     error={formState.errors['role']}

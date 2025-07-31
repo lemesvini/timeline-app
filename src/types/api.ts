@@ -55,6 +55,7 @@ export type User = Entity<{
   lastLogin?: Date;
   lockUntil?: Date;
   avatarUrl?: string;
+  password?: string;
 }>;
 
 export type Movie = Entity<{

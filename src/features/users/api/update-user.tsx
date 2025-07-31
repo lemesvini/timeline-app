@@ -15,14 +15,18 @@ export const updateUserInputSchema = z.object({
     .string()
     .min(1, { message: 'Nome completo é obrigatório' })
     .max(100, { message: 'Nome completo deve ter no máximo 100 caracteres' }),
+  email: z.string().min(1, { message: 'Email é obrigatório' }).email({
+    message: 'Email inválido',
+  }),
   role: z.nativeEnum(Role, {
     message: 'Cargo é obrigatório',
   }),
   avatarFile: z
     .instanceof(FileList)
     .optional()
+    .nullable()
     .transform((fileList) => fileList?.[0]),
-  avatarUrl: z.string().optional(),
+  avatarUrl: z.string().optional().nullable(),
 });
 
 export type UpdateUserInput = z.infer<typeof updateUserInputSchema>;
