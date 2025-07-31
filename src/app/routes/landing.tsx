@@ -5,14 +5,14 @@ import {
   IconBrandVite,
 } from '@tabler/icons-react';
 
-// import logo from '@/assets/images/epicora.png';
+// import logo from '@/assets/images/timeline.png';
 import { Link } from '@/components/ui/link';
 import { paths } from '@/config/paths';
 
 const LandingPageRoute = () => {
   return (
     <div className='min-h-screen flex flex-col items-center justify-center text-foreground p-8'>
-      {/* <img src={logo} alt='Epicora' className='w-20 h-20 mb-4 rounded-lg' /> */}
+      {/* <img src={logo} alt='Timeline' className='w-20 h-20 mb-4 rounded-lg' /> */}
       <h1 className='text-5xl font-bold mb-4'>Timeline</h1>
       <p className='text-xl text-muted-foreground mb-8 text-center max-w-2xl'>
         Projeto de exemplo do sistema Timeline

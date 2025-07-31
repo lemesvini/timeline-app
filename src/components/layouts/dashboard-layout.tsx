@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useEffect, useState } from 'react';
 import { NavLink, useLocation, useNavigate, useNavigation } from 'react-router';
 
-// import logo from '@/assets/images/epicora.png';
+// import logo from '@/assets/images/timeline.png';
 import { ThemeModeToggle } from '@/components/theme/theme-mode-toggle';
 import { Button } from '@/components/ui/button';
 import {
@@ -109,11 +109,6 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       icon: IconUsersGroup,
     },
     {
-      name: 'Filmes',
-      to: paths.app.movies.getHref(),
-      icon: IconMovie,
-    },
-    {
       name: 'Perfil',
       to: paths.app.profile.getHref(),
       icon: IconUser,
@@ -203,7 +198,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
         </Sidebar>
 
         <div className='flex-1 flex flex-col min-h-screen'>
-          <header className='sticky top-0 z-5 flex h-14 items-center justify-between w-full gap-4 border-b bg-background px-6 pt-8 pb-8 sm:pb-0 group-data-[collapsible=icon]:p-2 sm:static sm:h-auto sm:border-0 sm:bg-transparent'>
+          <header className='flex items-center justify-between w-full gap-4 border-b bg-background px-6 pt-8 pb-8 sm:pb-0 group-data-[collapsible=icon]:p-2 sm:static sm:h-auto mb-4 border border-red-500 '>
             <Progress />
             <div className='flex items-center gap-2'>
               <SidebarTrigger

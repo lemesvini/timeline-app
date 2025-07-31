@@ -2,7 +2,7 @@ import { LoginForm } from '@/features/auth/components/login-form';
 
 import { Link, useNavigate, useSearchParams } from 'react-router';
 import { paths } from '@/config/paths';
-// import logo from '@/assets/images/epicora.png';
+// import logo from '@/assets/images/timeline.png';
 import { AuthLayout } from '@/components/layouts/auth-layout';
 
 export default function LoginPage() {
