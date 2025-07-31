@@ -1,11 +1,11 @@
 import { AuthLayout } from '@/components/layouts/auth-layout';
-import { paths } from '@/config/paths';
-import { Link, useParams } from 'react-router';
+//import { paths } from '@/config/paths';
+//import { Link, useParams } from 'react-router';
 // import logo from '@/assets/images/timeline.png';
-import { ResetPasswordForm } from '@/features/auth/components/reset-password-form';
+// import { ResetPasswordForm } from '@/features/auth/components/reset-password-form';
 
 export default function ResetPasswordPage() {
-  const { token } = useParams();
+  // const { token } = useParams();
 
   return (
     <AuthLayout title='Redefinir senha'>
@@ -15,11 +15,11 @@ export default function ResetPasswordPage() {
           </div>
           <div className='flex flex-1 items-center justify-center'>
             <div className='w-full max-w-xs'>
-              {token ? (
+              {/* {token ? (
                 <ResetPasswordForm token={token} />
               ) : (
                 <div>Token não encontrado</div>
-              )}
+              )} */}
             </div>
           </div>
         </div>
