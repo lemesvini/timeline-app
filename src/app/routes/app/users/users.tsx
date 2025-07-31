@@ -6,11 +6,9 @@ import {
   getUsersQueryOptions,
   CreateUser,
   UsersList,
-  ExportUsers,
 } from '@/features/users';
-import { UserFilters } from '@/features/users/components/user-filters';
-import { useSearchParams } from 'react-router';
-import { useMemo } from 'react';
+// import { useSearchParams } from 'react-router';
+// import { useMemo } from 'react';
 
 export const clientLoader =
   (queryClient: QueryClient) =>
@@ -37,50 +35,46 @@ export const clientLoader =
   };
 
 const UsersRoute = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const currentFilters = searchParams.get('filters');
-  const initialFilters = useMemo(() => {
-    try {
-      return currentFilters ? JSON.parse(currentFilters) : undefined;
-    } catch {
-      return undefined;
-    }
-  }, [currentFilters]);
+  // const [searchParams, setSearchParams] = useSearchParams();
+  // const currentFilters = searchParams.get('filters');
+  // const initialFilters = useMemo(() => {
+  //   try {
+  //     return currentFilters ? JSON.parse(currentFilters) : undefined;
+  //   } catch {
+  //     return undefined;
+  //   }
+  // }, [currentFilters]);
 
-  const handleFiltersChange = (newFilters: string) => {
-    setSearchParams((prev) => {
-      if (!newFilters) {
-        prev.delete('filters');
-      } else {
-        prev.set('filters', newFilters);
-      }
-      return prev;
-    });
-  };
+  // const handleFiltersChange = (newFilters: string) => {
+  //   setSearchParams((prev) => {
+  //     if (!newFilters) {
+  //       prev.delete('filters');
+  //     } else {
+  //       prev.set('filters', newFilters);
+  //     }
+  //     return prev;
+  //   });
+  // };
 
   return (
-    <ContentLayout title='Usuários'>
+    <ContentLayout title='Usuários' rightContent={<CreateUser /> }>
       <div className='space-y-6'>
         {/* Navigation Card */}
-        <Card>
-          <CardContent>
             <div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
               <div className='flex flex-col gap-2 sm:flex-row sm:items-center'>
-                <UserFilters
+                {/* <UserFilters
                   onFiltersChange={handleFiltersChange}
                   initialFilters={initialFilters}
-                />
+                /> */}
               </div>
               <div className='flex items-center gap-2'>
-                <ExportUsers />
-                <CreateUser />
+               {/* <ExportUsers /> */}
+                {/* <CreateUser /> */}
               </div>
             </div>
-          </CardContent>
-        </Card>
         {/* Table Card */}
         <Card>
-          <CardContent className='p-0'>
+          <CardContent className='px-6'>
             <UsersList />
           </CardContent>
         </Card>
