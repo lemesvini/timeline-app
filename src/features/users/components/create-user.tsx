@@ -1,4 +1,4 @@
-import { IconPlus } from '@tabler/icons-react';
+//import { IconPlus } from '@tabler/icons-react';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
@@ -29,8 +29,8 @@ export const CreateUser = () => {
       <FormDrawer
         isDone={createUserMutation.isSuccess}
         triggerButton={
-          <Button size='sm' icon={<IconPlus className='size-4' />}>
-            Criar usuário
+          <Button size='sm' >
+            + Criar usuário
           </Button>
         }
         title='Criar usuário'

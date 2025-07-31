@@ -1,7 +1,7 @@
 import { useNavigate, useSearchParams, Link } from 'react-router';
 import { toast } from 'sonner';
 
-// import logo from '@/assets/images/epicora.png';
+// import logo from '@/assets/images/timeline.png';
 import { AuthLayout } from '@/components/layouts/auth-layout';
 import { paths } from '@/config/paths';
 import { ForgotPasswordForm } from '@/features/auth/components/forgot-password-form';

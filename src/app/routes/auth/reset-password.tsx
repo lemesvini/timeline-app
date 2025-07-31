@@ -1,34 +1,25 @@
 import { AuthLayout } from '@/components/layouts/auth-layout';
-import { paths } from '@/config/paths';
-import { Link, useParams } from 'react-router';
-// import logo from '@/assets/images/epicora.png';
-import { ResetPasswordForm } from '@/features/auth/components/reset-password-form';
+//import { paths } from '@/config/paths';
+//import { Link, useParams } from 'react-router';
+// import logo from '@/assets/images/timeline.png';
+// import { ResetPasswordForm } from '@/features/auth/components/reset-password-form';
 
 export default function ResetPasswordPage() {
-  const { token } = useParams();
+  // const { token } = useParams();
 
   return (
     <AuthLayout title='Redefinir senha'>
       <div className='grid min-h-svh lg:grid-cols-2'>
         <div className='flex flex-col gap-4 p-6 md:p-10'>
           <div className='flex justify-center gap-2 md:justify-start'>
-            <Link
-              to={paths.home.path}
-              className='flex items-center gap-2 font-medium'
-            >
-              <div className='flex items-center justify-center rounded-md bg-primary text-primary-foreground overflow-hidden'>
-                {/* <img src={logo} alt='Logo' className='h-6 w-6' /> */}
-              </div>
-              Epicora
-            </Link>
           </div>
           <div className='flex flex-1 items-center justify-center'>
             <div className='w-full max-w-xs'>
-              {token ? (
+              {/* {token ? (
                 <ResetPasswordForm token={token} />
               ) : (
                 <div>Token não encontrado</div>
-              )}
+              )} */}
             </div>
           </div>
         </div>

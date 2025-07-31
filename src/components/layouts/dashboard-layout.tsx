@@ -1,22 +1,23 @@
 import {
   IconUsersGroup,
   IconLayoutGrid,
-  IconMovie,
+  //IconMovie,
   IconLogout,
   IconUser,
+  //IconPlus,
 } from '@tabler/icons-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useEffect, useState } from 'react';
-import { NavLink, useLocation, useNavigate, useNavigation } from 'react-router';
-
-// import logo from '@/assets/images/epicora.png';
-import { ThemeModeToggle } from '@/components/theme/theme-mode-toggle';
+//import { useEffect, useState } from 'react';
+import { NavLink, useNavigate } from 'react-router';
+// import { useNavigation, useLocation } from 'react-router';
+// import logo from '@/assets/images/timeline.png';
+//import { ThemeModeToggle } from '@/components/theme/theme-mode-toggle';
 import { Button } from '@/components/ui/button';
 import {
   Sidebar,
   SidebarContent,
   SidebarHeader,
-  SidebarTrigger,
+  //SidebarTrigger,
   SidebarMenu,
   SidebarMenuItem,
   SidebarGroup,
@@ -51,44 +52,44 @@ const Logo = () => {
   );
 };
 
-const Progress = () => {
-  const { state, location } = useNavigation();
-  const [progress, setProgress] = useState(0);
+// const Progress = () => {
+//   const { state, location } = useNavigation();
+//   const [progress, setProgress] = useState(0);
 
-  useEffect(() => {
-    setProgress(0);
-  }, [location?.pathname]);
+//   useEffect(() => {
+//     setProgress(0);
+//   }, [location?.pathname]);
 
-  useEffect(() => {
-    if (state === 'loading') {
-      const timer = setInterval(() => {
-        setProgress((oldProgress) => {
-          if (oldProgress === 100) {
-            clearInterval(timer);
-            return 100;
-          }
-          const newProgress = oldProgress + 10;
-          return newProgress > 100 ? 100 : newProgress;
-        });
-      }, 300);
+//   useEffect(() => {
+//     if (state === 'loading') {
+//       const timer = setInterval(() => {
+//         setProgress((oldProgress) => {
+//           if (oldProgress === 100) {
+//             clearInterval(timer);
+//             return 100;
+//           }
+//           const newProgress = oldProgress + 10;
+//           return newProgress > 100 ? 100 : newProgress;
+//         });
+//       }, 300);
 
-      return () => {
-        clearInterval(timer);
-      };
-    }
-  }, [state]);
+//       return () => {
+//         clearInterval(timer);
+//       };
+//     }
+//   }, [state]);
 
-  if (state !== 'loading') {
-    return null;
-  }
+//   if (state !== 'loading') {
+//     return null;
+//   }
 
-  return (
-    <div
-      className='fixed left-0 top-0 h-1 bg-primary transition-all duration-75 ease-in-out'
-      style={{ width: `${progress}%` }}
-    ></div>
-  );
-};
+//   return (
+//     <div
+//       className='fixed left-0 top-0 h-1 bg-primary transition-all duration-75 ease-in-out'
+//       style={{ width: `${progress}%` }}
+//     ></div>
+//   );
+// };
 
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { data: user } = useUser();
@@ -109,11 +110,6 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       icon: IconUsersGroup,
     },
     {
-      name: 'Filmes',
-      to: paths.app.movies.getHref(),
-      icon: IconMovie,
-    },
-    {
       name: 'Perfil',
       to: paths.app.profile.getHref(),
       icon: IconUser,
@@ -121,8 +117,8 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
     },
   ].filter(Boolean) as SideNavigationItem[];
 
-  const currentPath = useLocation().pathname;
-  const pathName = navigation.find((item) => item.to === currentPath)?.name;
+  //const currentPath = useLocation().pathname;
+  //const pathName = navigation.find((item) => item.to === currentPath)?.name;
 
   return (
     <div className='flex min-h-screen w-full'>
@@ -202,22 +198,8 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
           </SidebarContent>
         </Sidebar>
 
-        <div className='flex-1 flex flex-col min-h-screen'>
-          <header className='sticky top-0 z-5 flex h-14 items-center justify-between w-full gap-4 border-b bg-background px-6 pt-8 pb-8 sm:pb-0 group-data-[collapsible=icon]:p-2 sm:static sm:h-auto sm:border-0 sm:bg-transparent'>
-            <Progress />
-            <div className='flex items-center gap-2'>
-              <SidebarTrigger
-                variant='outline'
-                className='overflow-hidden transition-colors duration-75'
-                size='icon'
-              />
-              <h1 className='text-lg font-semibold'>{pathName}</h1>
-            </div>
-            <div className='flex items-center gap-2'>
-              <ThemeModeToggle />
-            </div>
-          </header>
-          <main className='flex-1 p-4 sm:px-6 sm:py-0'>{children}</main>
+        <div className='flex-1 flex flex-col min-h-screen p-4'>
+          <main className='flex-1'>{children}</main>
         </div>
       </SidebarProvider>
     </div>

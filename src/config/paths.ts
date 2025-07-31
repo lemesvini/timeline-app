@@ -31,10 +31,7 @@ export const paths = {
       path: '',
       getHref: () => '/app',
     },
-    movies: {
-      path: 'movies',
-      getHref: () => '/app/movies',
-    },
+
     // discussion: {
     //   path: 'discussions/:discussionId',
     //   getHref: (id: string) => `/app/discussions/${id}`,
