@@ -44,6 +44,14 @@ export const paths = {
       path: 'users/:userId',
       getHref: (userId: string) => `/app/users/${userId}`,
     },
+    products: {
+      path: 'products',
+      getHref: () => '/app/products',
+    },
+    product: {
+      path: 'products/:productId',
+      getHref: (productId: string) => `/app/products/${productId}`,
+    },
     profile: {
       path: 'profile',
       getHref: () => '/app/profile',

@@ -1,7 +1,5 @@
 import { Link, useSearchParams } from 'react-router';
-//import { useMemo } from 'react';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { Table } from '@/components/ui/table';
@@ -11,68 +9,70 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
-import { getInitials, getRoleLabel, formatDate } from '@/lib/utils';
+import { formatDate, formatCurrency } from '@/lib/utils';
 
-import { useUsers } from '../api/get-users';
+import { useProducts } from '../api/get-products';
 
-import { DeleteUser } from './delete-user';
-import { UpdateUser } from './update-user';
+import { DeleteProduct } from './delete-product';
+import { UpdateProduct } from './update-product';
 import { paths } from '@/config/paths';
-import { EllipsisVertical, EyeIcon } from 'lucide-react';
+import { EllipsisVertical, EyeIcon, Package } from 'lucide-react';
 
-export const UsersList = () => {
+export const ProductsList = () => {
   const [searchParams] = useSearchParams();
 
-  const usersQuery = useUsers({
+  const productsQuery = useProducts({
     page: Number(searchParams.get('page') ?? 1),
     filters: searchParams.get('filters') ?? undefined,
   });
 
-  if (usersQuery.isLoading) {
+  if (productsQuery.isLoading) {
     return <Spinner />;
   }
 
-  if (usersQuery.isError) {
-    console.error(usersQuery.error);
-    return <div>Houve um erro ao carregar os usuários.</div>;
+  if (productsQuery.isError) {
+    console.error(productsQuery.error);
+    return <div>Houve um erro ao carregar os produtos.</div>;
   }
 
-  const users = usersQuery.data?.data;
-  const meta = usersQuery.data?.metadata;
+  const products = productsQuery.data?.data;
+  const meta = productsQuery.data?.metadata;
 
   return (
     <Table
-      data={users || []}
+      data={products || []}
       columns={[
         {
           title: 'Nome',
-          field: 'fullName',
-          Cell: ({ entry: { fullName, avatarUrl } }) => {
+          field: 'name',
+          Cell: ({ entry: { name } }) => {
             return (
               <div className='flex items-center gap-2'>
-                <Avatar>
-                  <AvatarImage src={avatarUrl} />
-                  <AvatarFallback>
-                    {fullName ? getInitials(fullName) : ''}
-                  </AvatarFallback>
-                </Avatar>
-                <span>{fullName}</span>
+                <Package className='h-4 w-4 text-muted-foreground' />
+                <span>{name}</span>
               </div>
             );
           },
         },
         {
-          title: 'Cargo',
-          field: 'role',
-          breakpoint: 'sm',
-          Cell: ({ entry: { role } }) => {
-            return <span>{getRoleLabel(role)}</span>;
+          title: 'Descrição',
+          field: 'description',
+          breakpoint: 'md',
+          Cell: ({ entry: { description } }) => {
+            return (
+              <span className='text-muted-foreground'>
+                {description || 'Sem descrição'}
+              </span>
+            );
           },
         },
         {
-          title: 'Email',
-          field: 'email',
-          breakpoint: 'md',
+          title: 'Preço',
+          field: 'price',
+          breakpoint: 'sm',
+          Cell: ({ entry: { price } }) => {
+            return <span className='font-medium'>{formatCurrency(price)}</span>;
+          },
         },
         {
           title: 'Criado em',
@@ -85,10 +85,10 @@ export const UsersList = () => {
         {
           title: '',
           field: 'id',
-          Cell: ({ entry: user }) => {
+          Cell: ({ entry: product }) => {
             return (
               <div className="flex items-center gap-2">
-                <Link to={paths.app.user.getHref(user.id.toString())}>
+                <Link to={paths.app.product.getHref(product.id.toString())}>
                   <Button size="icon" variant="ghost">
                     <EyeIcon className="h-4 w-4" />
                   </Button>
@@ -101,10 +101,10 @@ export const UsersList = () => {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem asChild>
-                      <UpdateUser userId={user.id} user={user} />
+                      <UpdateProduct productId={product.id} product={product} />
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <DeleteUser id={user.id} />
+                      <DeleteProduct id={product.id} />
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -122,4 +122,4 @@ export const UsersList = () => {
       }}
     />
   );
-};
+}; 

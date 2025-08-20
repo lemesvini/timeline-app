@@ -1,7 +1,7 @@
 import {
   IconUsersGroup,
   IconLayoutGrid,
-  //IconMovie,
+  IconPackage,
   IconLogout,
   IconUser,
   //IconPlus,
@@ -108,6 +108,11 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       name: 'Usuários',
       to: paths.app.users.getHref(),
       icon: IconUsersGroup,
+    },
+    {
+      name: 'Produtos',
+      to: paths.app.products.getHref(),
+      icon: IconPackage,
     },
     {
       name: 'Perfil',

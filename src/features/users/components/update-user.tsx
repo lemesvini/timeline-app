@@ -34,8 +34,8 @@ export const UpdateUser = ({ userId, user }: UpdateUserProps) => {
       <FormDrawer
         isDone={updateUserMutation.isSuccess}
         triggerButton={
-          <Button size='icon' variant='ghost'>
-            <IconPencil className='size-4' />
+          <Button icon={<IconPencil/>} variant='ghost'>
+            <span>Editar</span>
           </Button>
         }
         title='Editar usuário'
