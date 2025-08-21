@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { z } from 'zod';
-import { Plus } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
