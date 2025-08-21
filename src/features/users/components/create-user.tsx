@@ -30,7 +30,7 @@ export const CreateUser = () => {
         isDone={createUserMutation.isSuccess}
         triggerButton={
           <Button size='sm' >
-            + Criar usuário
+            + Criar Usuário
           </Button>
         }
         title='Criar usuário'

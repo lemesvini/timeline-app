@@ -66,3 +66,9 @@ export type Movie = Entity<{
   releaseDate: string;
   director: User;
 }>;
+
+export type Product = Entity<{
+  name: string;
+  description?: string;
+  price: number;
+}>;
