@@ -1,4 +1,5 @@
 import { Link, useSearchParams } from 'react-router';
+import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
@@ -11,16 +12,20 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Card, CardContent } from '@/components/ui/card';
 import { formatDate, formatCurrency } from '@/lib/utils';
+import type { Product } from '@/types/api';
 
 import { useProducts } from '../api/get-products';
 
 import { DeleteProduct } from './delete-product';
 import { UpdateProduct } from './update-product';
 import { paths } from '@/config/paths';
-import { EllipsisVertical, EyeIcon, Package } from 'lucide-react';
+import { Eye, Pencil, Trash2, MoreVertical, Package } from 'lucide-react'; // or use @tabler/icons-react
 
 export const ProductsList = () => {
   const [searchParams] = useSearchParams();
+  
+  const [editProduct, setEditProduct] = useState<null | Product>(null);
+  const [deleteProduct, setDeleteProduct] = useState<null | Product>(null);
 
   const productsQuery = useProducts({
     page: Number(searchParams.get('page') ?? 1),
@@ -88,27 +93,57 @@ export const ProductsList = () => {
               title: '',
               field: 'id',
               Cell: ({ entry: product }) => (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center justify-center gap-2">
                   <Link to={paths.app.product.getHref(product.id.toString())}>
-                    <Button size="icon" variant="ghost">
-                      <EyeIcon className="h-4 w-4" />
+                    <Button size="icon" variant="ghost" aria-label="Ver produto">
+                      <Eye className="h-4 w-4" strokeWidth={2.2} />
                     </Button>
                   </Link>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon">
-                        <EllipsisVertical className="h-4 w-4" />
+                      <Button variant="ghost" size="icon" aria-label="Ações">
+                        <MoreVertical className="h-4 w-4" strokeWidth={2.2} />
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem asChild>
-                        <UpdateProduct productId={product.id} product={product} />
+                    <DropdownMenuContent align="end" className="w-44 bg-background border border-border">
+                      <DropdownMenuItem
+                        onSelect={e => {
+                          e.preventDefault();
+                          setEditProduct(product);
+                        }}
+                        className="flex items-center gap-2 text-sm hover:bg-muted focus:bg-muted"
+                      >
+                        <Pencil className="h-4 w-4" strokeWidth={2.2} />
+                        <span className="text-foreground">Editar</span>
                       </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <DeleteProduct id={product.id} />
+                      <DropdownMenuItem
+                        onSelect={e => {
+                          e.preventDefault();
+                          setDeleteProduct(product);
+                        }}
+                        className="flex items-center gap-2 text-sm text-red-600 hover:bg-muted focus:bg-muted"
+                      >
+                        <Trash2 className="h-4 w-4" strokeWidth={2.2} />
+                        <span className="text-red-600">Excluir</span>
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
+                  {/* Modals/Drawers for edit and delete */}
+                  {editProduct?.id === product.id && (
+                    <UpdateProduct
+                      open={true}
+                      onOpenChange={() => setEditProduct(null)}
+                      productId={product.id}
+                      product={product}
+                    />
+                  )}
+                  {deleteProduct?.id === product.id && (
+                    <DeleteProduct
+                      open={true}
+                      onOpenChange={() => setDeleteProduct(null)}
+                      id={product.id}
+                    />
+                  )}
                 </div>
               ),
             },

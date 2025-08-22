@@ -11,15 +11,18 @@ import { useDeleteUser } from '../api/delete-user';
 
 type DeleteUserProps = {
   id: number;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 };
 
-export const DeleteUser = ({ id }: DeleteUserProps) => {
+export const DeleteUser = ({ id, open, onOpenChange }: DeleteUserProps) => {
   const { data: user } = useUser();
 
   const deleteUserMutation = useDeleteUser({
     mutationConfig: {
       onSuccess: () => {
         toast.success('Usuário deletado com sucesso');
+        onOpenChange(false);
       },
     },
   });
@@ -32,17 +35,15 @@ export const DeleteUser = ({ id }: DeleteUserProps) => {
         icon='danger'
         title='Remover usuário'
         body='Tem certeza que deseja remover este usuário?'
-        triggerButton={
-          <Button icon={<IconTrash/>} variant='ghost' >
-            <span>Remover</span>
-          </Button>
-        }
+        open={open}
+        onOpenChange={onOpenChange}
         confirmButton={
           <Button
             isLoading={deleteUserMutation.isPending}
             type='button'
             variant='destructive'
             onClick={() => deleteUserMutation.mutate({ userId: id })}
+            icon={<IconTrash />}
           >
             Remover usuário
           </Button>

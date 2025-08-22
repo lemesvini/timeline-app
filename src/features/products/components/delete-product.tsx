@@ -1,5 +1,3 @@
-import { useState } from 'react';
-import { Trash2 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -8,35 +6,29 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+  DialogTitle
 } from '@/components/ui/dialog';
 import { useDeleteProduct } from '../api/delete-product';
 
 interface DeleteProductProps {
   id: number;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
-export const DeleteProduct = ({ id }: DeleteProductProps) => {
-  const [open, setOpen] = useState(false);
+export const DeleteProduct = ({ id, open, onOpenChange }: DeleteProductProps) => {
   const deleteProduct = useDeleteProduct();
 
   const handleDelete = () => {
     deleteProduct.mutate(id, {
       onSuccess: () => {
-        setOpen(false);
+        onOpenChange(false);
       },
     });
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="ghost" size="sm" className="w-full justify-start text-destructive hover:text-destructive">
-          <Trash2 className="h-4 w-4 mr-2" />
-          Excluir
-        </Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Confirmar Exclusão</DialogTitle>
@@ -47,7 +39,7 @@ export const DeleteProduct = ({ id }: DeleteProductProps) => {
         <DialogFooter>
           <Button
             variant="outline"
-            onClick={() => setOpen(false)}
+            onClick={() => onOpenChange(false)}
             disabled={deleteProduct.isPending}
           >
             Cancelar
@@ -63,4 +55,4 @@ export const DeleteProduct = ({ id }: DeleteProductProps) => {
       </DialogContent>
     </Dialog>
   );
-}; 
+};
