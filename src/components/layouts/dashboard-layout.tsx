@@ -115,6 +115,11 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       icon: IconPackage,
     },
     {
+      name: 'Clientes',
+      to: paths.app.customers.getHref(),
+      icon: IconUsersGroup,
+    },
+    {
       name: 'Perfil',
       to: paths.app.profile.getHref(),
       icon: IconUser,
@@ -149,7 +154,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
                           cn(
                             'flex items-center group-data-[collapsible=icon]:justify-center gap-2 w-full p-2 px-4 group-data-[collapsible=icon]:p-1 rounded-xl hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors duration-75',
                             isActive &&
-                              'bg-sidebar-primary text-sidebar-primary-foreground',
+                              'bg-sidebar-primary text-sidebar-primary-foreground'
                           )
                         }
                       >

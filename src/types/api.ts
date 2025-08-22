@@ -72,3 +72,17 @@ export type Product = Entity<{
   description?: string;
   price: number;
 }>;
+
+export type Customers = Entity<{
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  postalCode?: string;
+  createdAt: string;
+  updatedAt: string;
+}>;

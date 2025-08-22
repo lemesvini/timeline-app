@@ -1,9 +1,9 @@
 import { QueryClient } from '@tanstack/react-query';
 
 import { ContentLayout } from '@/components/layouts';
-import { getUsersQueryOptions, CreateUser, UsersList } from '@/features/users';
-// import { useSearchParams } from 'react-router';
-// import { useMemo } from 'react';
+import { getCustomersQueryOptions } from '@/features/customers/api/get-customers';
+
+import { CustomersList } from '@/features/customers/components/customers-list';
 
 export const clientLoader =
   (queryClient: QueryClient) =>
@@ -12,7 +12,7 @@ export const clientLoader =
       const url = new URL(request.url);
       const page = Number(url.searchParams.get('page')) || 1;
 
-      const query = getUsersQueryOptions({ page });
+      const query = getCustomersQueryOptions({ page });
 
       const data =
         queryClient.getQueryData(query.queryKey) ??
@@ -30,29 +30,8 @@ export const clientLoader =
   };
 
 const UsersRoute = () => {
-  // const [searchParams, setSearchParams] = useSearchParams();
-  // const currentFilters = searchParams.get('filters');
-  // const initialFilters = useMemo(() => {
-  //   try {
-  //     return currentFilters ? JSON.parse(currentFilters) : undefined;
-  //   } catch {
-  //     return undefined;
-  //   }
-  // }, [currentFilters]);
-
-  // const handleFiltersChange = (newFilters: string) => {
-  //   setSearchParams((prev) => {
-  //     if (!newFilters) {
-  //       prev.delete('filters');
-  //     } else {
-  //       prev.set('filters', newFilters);
-  //     }
-  //     return prev;
-  //   });
-  // };
-
   return (
-    <ContentLayout title='Usuários' rightContent={<CreateUser />}>
+    <ContentLayout title='Clientes' rightContent={<div />}>
       <div className='space-y-6'>
         {/* Navigation Card */}
         <div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
@@ -68,7 +47,7 @@ const UsersRoute = () => {
           </div>
         </div>
         {/* Table Card */}
-        <UsersList />
+        <CustomersList />
       </div>
     </ContentLayout>
   );
