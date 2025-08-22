@@ -56,5 +56,9 @@ export const paths = {
       path: 'profile',
       getHref: () => '/app/profile',
     },
+    customers: {
+      path: 'customers',
+      getHref: () => '/app/customers',
+    },
   },
 } as const;
