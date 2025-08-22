@@ -10,9 +10,15 @@ import { Role } from '@/types/api';
 
 interface ProfileDataProps {
   setIsEditing: (value: boolean) => void;
+  setIsChangingPassword: (value: boolean) => void;
+  isChangingPassword: boolean;
 }
 
-export const ProfileData = ({ setIsEditing }: ProfileDataProps) => {
+export const ProfileData = ({
+  setIsEditing,
+  setIsChangingPassword,
+  isChangingPassword,
+}: ProfileDataProps) => {
   const { data: user } = useUser();
 
   return (
@@ -48,7 +54,7 @@ export const ProfileData = ({ setIsEditing }: ProfileDataProps) => {
       </CardHeader>
       <hr />
       <CardContent className='pt-6 pb-6'>
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
           <div className='space-y-1 min-w-fit'>
             <span className='text-sm font-semibold text-muted-foreground'>
               Email
@@ -70,6 +76,21 @@ export const ProfileData = ({ setIsEditing }: ProfileDataProps) => {
                 ? new Date(user.createdAt).toLocaleDateString('pt-BR')
                 : ''}
             </p>
+          </div>
+          <div className='space-y-1 md:col-span-2 lg:col-span-1 self-center'>
+            {!isChangingPassword && (
+              <Button
+                variant='default'
+                onClick={() => setIsChangingPassword(true)}
+              >
+                Alterar Senha
+              </Button>
+            )}
+            {isChangingPassword && (
+              <Button variant='default' disabled>
+                Alterar Senha
+              </Button>
+            )}
           </div>
         </div>
       </CardContent>

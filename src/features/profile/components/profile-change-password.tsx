@@ -13,8 +13,25 @@ import { AxiosError } from 'axios';
 
 type ChangePasswordFormData = z.infer<typeof changePasswordInputSchema>;
 
-export const ProfileChangePassword = () => {
+interface ProfileChangePasswordProps {
+  setIsChangingPassword?: (value: boolean) => void;
+}
+
+export const ProfileChangePassword = ({
+  setIsChangingPassword = () => {},
+}: ProfileChangePasswordProps) => {
   const formRef = useRef<UseFormReturn<ChangePasswordFormData> | null>(null);
+
+  const handleCancel = () => {
+    if (typeof setIsChangingPassword === 'function') {
+      setIsChangingPassword(false);
+    } else {
+      console.error(
+        'setIsChangingPassword is not a function:',
+        setIsChangingPassword
+      );
+    }
+  };
 
   const changePassword = useChangePassword({
     mutationConfig: {
@@ -68,6 +85,14 @@ export const ProfileChangePassword = () => {
                 />
                 <Button type='submit' isLoading={changePassword.isPending}>
                   Alterar senha
+                </Button>
+                <Button
+                  type='button'
+                  variant='outline'
+                  onClick={handleCancel}
+                  className='ml-2'
+                >
+                  Cancelar
                 </Button>
               </>
             );

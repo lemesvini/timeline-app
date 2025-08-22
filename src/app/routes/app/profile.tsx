@@ -9,15 +9,28 @@ import {
 
 const ProfileRoute = () => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [isChangingPassword, setIsChangingPassword] = useState<boolean>(false);
 
   return (
     <ContentLayout title='Perfil do Usuário'>
       <div className='flex flex-col pb-2 items-center gap-6'>
         <div className='w-full'>
-          {!isEditing && <ProfileData setIsEditing={setIsEditing} />}
+          {!isEditing && (
+            <ProfileData
+              setIsEditing={setIsEditing}
+              setIsChangingPassword={setIsChangingPassword}
+              isChangingPassword={isChangingPassword}
+            />
+          )}
+
           {isEditing && <ProfileEdit setIsEditing={setIsEditing} />}
         </div>
-        <ProfileChangePassword />
+        {isChangingPassword && (
+          <ProfileChangePassword
+            key='change-password'
+            setIsChangingPassword={setIsChangingPassword}
+          />
+        )}
       </div>
     </ContentLayout>
   );
