@@ -1,24 +1,12 @@
-import { useState } from 'react';
 import { z } from 'zod';
-import { Edit } from 'lucide-react';
+import { useEffect } from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import {
   Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
+  FormDrawer,
+  Input,
 } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
 
 import { useUpdateProduct } from '../api/update-product';
 import type { Product } from '@/types/api';
@@ -40,11 +28,21 @@ type UpdateProductFormData = z.infer<typeof updateProductSchema>;
 interface UpdateProductProps {
   productId: number;
   product: Product;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
-export const UpdateProduct = ({ productId, product }: UpdateProductProps) => {
-  const [open, setOpen] = useState(false);
+export const UpdateProduct = ({
+  productId,
+  product,
+  open,
+  onOpenChange,
+}: UpdateProductProps) => {
   const updateProduct = useUpdateProduct();
+
+  useEffect(() => {
+    if (!open) updateProduct.reset();
+  }, [open]);
 
   const onSubmit = (data: UpdateProductFormData) => {
     updateProduct.mutate(
@@ -58,112 +56,87 @@ export const UpdateProduct = ({ productId, product }: UpdateProductProps) => {
       },
       {
         onSuccess: () => {
-          setOpen(false);
+          onOpenChange(false);
         },
       },
     );
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="ghost" size="sm" className="w-full justify-start">
-          <Edit className="h-4 w-4 mr-2" />
-          Editar
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Editar Produto</DialogTitle>
-        </DialogHeader>
-        <Form
-          onSubmit={onSubmit}
-          schema={updateProductSchema}
-          className="space-y-4"
-          options={{
-            defaultValues: {
-              name: product.name,
-              description: product.description || '',
-              price: product.price.toString(),
-            },
-          }}
+    <FormDrawer
+      open={open}
+      onOpenChange={onOpenChange}
+      isDone={updateProduct.isSuccess}
+      title="Editar produto"
+      submitButton={
+        <Button
+          type="submit"
+          isLoading={updateProduct.isPending}
+          form="update-product"
         >
-          {(methods) => (
-            <>
-              <FormField
-                control={methods.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Nome</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Nome do produto" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+          Salvar
+        </Button>
+      }
+    >
+      <Form
+        id="update-product"
+        onSubmit={onSubmit}
+        schema={updateProductSchema}
+        options={{
+          defaultValues: {
+            name: product.name,
+            description: product.description,
+            price: String(product.price),
+          },
+        }}
+        className="space-y-4"
+      >
+        {({ register, formState }) => (
+          <div className="space-y-4">
+            <Input
+              label="Nome"
+              error={formState.errors['name']}
+              registration={register('name')}
+              placeholder="Nome do produto"
+            />
+            <div>
+              <label className="block text-sm font-medium mb-1" htmlFor="description">
+                Descrição
+              </label>
+              <textarea
+                id="description"
+                {...register('description')}
+                placeholder="Descrição do produto (opcional)"
+                rows={3}
+                className="w-full border rounded px-3 py-2 text-sm"
               />
-              <FormField
-                control={methods.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Descrição</FormLabel>
-                    <FormControl>
-                      <textarea
-                        placeholder="Descrição do produto (opcional)"
-                        className="flex min-h-[60px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={methods.control}
-                name="price"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Preço</FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-                          R$
-                        </span>
-                        <Input
-                          type="number"
-                          step="0.01"
-                          min="0"
-                          placeholder="0,00"
-                          className="pl-8"
-                          {...field}
-                        />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <div className="flex justify-end gap-2">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setOpen(false)}
-                >
-                  Cancelar
-                </Button>
-                <Button
-                  type="submit"
-                  disabled={updateProduct.isPending}
-                >
-                  {updateProduct.isPending ? 'Atualizando...' : 'Atualizar Produto'}
-                </Button>
+              {formState.errors['description'] && (
+                <span className="text-xs text-red-500">{formState.errors['description'].message as string}</span>
+              )}
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1" htmlFor="price">
+                Preço
+              </label>
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">R$</span>
+                <input
+                  id="price"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  placeholder="0,00"
+                  {...register('price')}
+                  className="pl-9 w-full border rounded px-3 py-2 text-sm"
+                />
               </div>
-            </>
-          )}
-        </Form>
-      </DialogContent>
-    </Dialog>
+              {formState.errors['price'] && (
+                <span className="text-xs text-red-500">{formState.errors['price'].message as string}</span>
+              )}
+            </div>
+          </div>
+        )}
+      </Form>
+    </FormDrawer>
   );
-}; 
+};

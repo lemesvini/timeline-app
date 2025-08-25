@@ -1,5 +1,6 @@
 import { Link, useSearchParams } from 'react-router';
 //import { useMemo } from 'react';
+import { useState } from 'react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -19,9 +20,13 @@ import { DeleteUser } from './delete-user';
 import { UpdateUser } from './update-user';
 import { paths } from '@/config/paths';
 import { EllipsisVertical, EyeIcon } from 'lucide-react';
+import { Pencil, Trash2 } from 'lucide-react';
+import type { User } from '@/types/api'; // adjust path if needed
 
 export const UsersList = () => {
   const [searchParams] = useSearchParams();
+  const [editUser, setEditUser] = useState<null | User>(null);
+  const [deleteUser, setDeleteUser] = useState<null | User>(null);
 
   const usersQuery = useUsers({
     page: Number(searchParams.get('page') ?? 1),
@@ -85,32 +90,60 @@ export const UsersList = () => {
         {
           title: '',
           field: 'id',
-          Cell: ({ entry: user }) => {
-            return (
-              <div className="flex items-center gap-2">
-                <Link to={paths.app.user.getHref(user.id.toString())}>
-                  <Button size="icon" variant="ghost">
-                    <EyeIcon className="h-4 w-4" />
+          Cell: ({ entry: user }) => (
+            <div className="flex items-center justify-center gap-2">
+              <Link to={paths.app.user.getHref(user.id.toString())}>
+                <Button size="icon" variant="ghost">
+                  <EyeIcon className="h-4 w-4" />
+                </Button>
+              </Link>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" aria-label="Ações">
+                    <EllipsisVertical className="h-4 w-4" />
                   </Button>
-                </Link>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon">
-                      <EllipsisVertical className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem asChild>
-                      <UpdateUser userId={user.id} user={user} />
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <DeleteUser id={user.id} />
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            );
-          },
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-44">
+                  <DropdownMenuItem
+                    onSelect={e => {
+                      e.preventDefault();
+                      setEditUser(user);
+                    }}
+                    className="flex items-center gap-2 text-sm hover:bg-muted focus:bg-muted"
+                  >
+                    <Pencil className="h-4 w-4" />
+                    <span className="text-foreground">Editar</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={e => {
+                      e.preventDefault();
+                      setDeleteUser(user);
+                    }}
+                    className="flex items-center gap-2 text-sm text-red-600 hover:bg-muted focus:bg-muted"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    <span className="text-red-600">Excluir</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              {/* Modals/Drawers for edit and delete */}
+              {editUser?.id === user.id && (
+                <UpdateUser
+                  open={true}
+                  onOpenChange={() => setEditUser(null)}
+                  userId={user.id}
+                  user={user}
+                />
+              )}
+              {deleteUser?.id === user.id && (
+                <DeleteUser
+                  open={true}
+                  onOpenChange={() => setDeleteUser(null)}
+                  id={user.id}
+                />
+              )}
+            </div>
+          ),
         },
       ]}
       pagination={{

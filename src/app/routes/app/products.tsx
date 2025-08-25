@@ -5,7 +5,7 @@ import {
   getProductsQueryOptions,
   CreateProduct,
   ProductsList,
-  ProductFilters,
+  // ProductFilters,
 } from '@/features/products';
 
 export const clientLoader =
@@ -24,7 +24,7 @@ const ProductsRoute = () => {
   return (
     <ContentLayout title='Produtos' rightContent={<CreateProduct />}>
       <div className='space-y-6'>
-        <ProductFilters />
+        {/* <ProductFilters /> */}
 
         <ProductsList />
       </div>

@@ -14,13 +14,15 @@ import {
   DrawerDescription,
 } from '../drawer';
 
-type FormDrawerProps = {
+export interface FormDrawerProps {
   isDone: boolean;
-  triggerButton: React.ReactElement;
+  triggerButton?: React.ReactElement; // Make optional
   submitButton: React.ReactElement;
   title: string;
   children: React.ReactNode;
-};
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}
 
 export const FormDrawer = ({
   title,
@@ -28,27 +30,34 @@ export const FormDrawer = ({
   isDone,
   triggerButton,
   submitButton,
+  open: controlledOpen,
+  onOpenChange,
 }: FormDrawerProps) => {
   const { close, open, isOpen } = useDisclosure();
+  void(open);
+
+  // Use controlled or uncontrolled open state
+  const isControlled = controlledOpen !== undefined && onOpenChange !== undefined;
+  const drawerOpen = isControlled ? controlledOpen : isOpen;
+  const drawerOnOpenChange = isControlled ? onOpenChange : (open: boolean) => (open ? open : close());
 
   React.useEffect(() => {
     if (isDone) {
       close();
+      if (isControlled && onOpenChange) onOpenChange(false);
     }
-  }, [isDone, close]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isDone]);
 
   return (
     <Drawer
-      open={isOpen}
-      onOpenChange={(isOpen) => {
-        if (!isOpen) {
-          close();
-        } else {
-          open();
-        }
-      }}
+      open={drawerOpen}
+      onOpenChange={drawerOnOpenChange}
     >
-      <DrawerTrigger asChild>{triggerButton}</DrawerTrigger>
+      {/* Only render trigger if uncontrolled */}
+      {!isControlled && triggerButton && (
+        <DrawerTrigger asChild>{triggerButton}</DrawerTrigger>
+      )}
       <DrawerContent className='flex max-w-[800px] flex-col justify-between sm:max-w-[540px]'>
         <div className='flex flex-col'>
           <DrawerHeader className='pb-4'>
@@ -59,7 +68,7 @@ export const FormDrawer = ({
         </div>
         <DrawerFooter>
           <DrawerClose asChild>
-            <Button variant='outline' type='submit'>
+            <Button variant='outline' type='button'>
               Fechar
             </Button>
           </DrawerClose>

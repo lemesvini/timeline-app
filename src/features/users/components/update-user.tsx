@@ -1,7 +1,5 @@
-import { IconPencil } from '@tabler/icons-react';
 import { toast } from 'sonner';
 
-import { Button } from '@/components/ui/button';
 import {
   Form,
   FormDrawer,
@@ -9,6 +7,7 @@ import {
   Select,
   ImageInput,
 } from '@/components/ui/form';
+import { Button } from '@/components/ui/button';
 import { Authorization, ROLES } from '@/lib/authorization';
 import { Role, type User } from '@/types/api';
 import { getRoleLabel } from '@/lib/utils';
@@ -18,13 +17,16 @@ import { useUpdateUser, updateUserInputSchema } from '../api/update-user';
 type UpdateUserProps = {
   userId: number;
   user: User;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 };
 
-export const UpdateUser = ({ userId, user }: UpdateUserProps) => {
+export const UpdateUser = ({ userId, user, open, onOpenChange }: UpdateUserProps) => {
   const updateUserMutation = useUpdateUser({
     mutationConfig: {
       onSuccess: () => {
         toast.success('Usuário atualizado com sucesso');
+        onOpenChange(false);
       },
     },
   });
@@ -32,18 +34,15 @@ export const UpdateUser = ({ userId, user }: UpdateUserProps) => {
   return (
     <Authorization allowedRoles={[ROLES.ADMINISTRATOR]}>
       <FormDrawer
+        open={open}
+        onOpenChange={onOpenChange}
         isDone={updateUserMutation.isSuccess}
-        triggerButton={
-          <Button icon={<IconPencil/>} variant='ghost'>
-            <span>Editar</span>
-          </Button>
-        }
         title='Editar usuário'
         submitButton={
           <Button
-            type='submit'
+            type="submit"
             isLoading={updateUserMutation.isPending}
-            form='update-user'
+            form="update-user"
           >
             Salvar
           </Button>
@@ -67,37 +66,34 @@ export const UpdateUser = ({ userId, user }: UpdateUserProps) => {
         >
           {({ register, formState, watch, setValue }) => {
             const avatarUrl = watch('avatarUrl');
-
             return (
-              <>
-                <div className='space-y-4'>
-                  <ImageInput
-                    label='Avatar'
-                    error={formState.errors['avatarUrl']}
-                    value={avatarUrl}
-                    onChange={(url) => setValue('avatarUrl', url || '')}
-                  />
-                  <Input
-                    label='Nome completo'
-                    error={formState.errors['fullName']}
-                    registration={register('fullName')}
-                  />
-                  <Input
-                    label='Email'
-                    error={formState.errors['email']}
-                    registration={register('email')}
-                  />
-                  <Select
-                    label='Cargo'
-                    error={formState.errors['role']}
-                    registration={register('role')}
-                    options={Object.values(Role).map((role) => ({
-                      label: getRoleLabel(role),
-                      value: role,
-                    }))}
-                  />
-                </div>
-              </>
+              <div className='space-y-4'>
+                <ImageInput
+                  label='Avatar'
+                  error={formState.errors['avatarUrl']}
+                  value={avatarUrl}
+                  onChange={(url) => setValue('avatarUrl', url || '')}
+                />
+                <Input
+                  label='Nome completo'
+                  error={formState.errors['fullName']}
+                  registration={register('fullName')}
+                />
+                <Input
+                  label='Email'
+                  error={formState.errors['email']}
+                  registration={register('email')}
+                />
+                <Select
+                  label='Cargo'
+                  error={formState.errors['role']}
+                  registration={register('role')}
+                  options={Object.values(Role).map((role) => ({
+                    label: getRoleLabel(role),
+                    value: role,
+                  }))}
+                />
+              </div>
             );
           }}
         </Form>
